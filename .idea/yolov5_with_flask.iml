@@ -5,7 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/venvs" />
       <excludeFolder url="file://$MODULE_DIR$/venvss" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.7 (yolov5_with_flask)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (yolov5_with_flask)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
