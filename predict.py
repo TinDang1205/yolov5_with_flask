@@ -27,6 +27,8 @@ from utils.segment.general import masks2segments, process_mask, process_mask_nat
 from utils.torch_utils import select_device, smart_inference_mode
 
 destination = 'static/mask/'
+
+
 def convert_to_3d_repeat(data_2d, z):
     x, y = data_2d.shape
     data_3d = np.repeat(data_2d[:, :, np.newaxis], z, axis=2)
@@ -52,7 +54,7 @@ def predict_model(
         augment=False,  # augmented inference
         visualize=False,  # visualize features
         update=False,  # update all models
-        project=ROOT / 'runs/predict-seg',  # save results to project/name
+        project='runs/predict-seg',  # save results to project/name
         name='exp',  # save results to project/name
         exist_ok=False,  # existing project/name ok, do not increment
         line_thickness=3,  # bounding box thickness (pixels)
@@ -257,7 +259,27 @@ def predict_model(
     data = json.loads(f.read())
     filename = os.path.basename(save_path).split('/')[-1]
     new_path = destination + filename
-    shutil.move(save_path, new_path)
+    # shutil.move(save_path, new_path)
+    all_values_y = []
+    all_values_x = []
+    for label_data in data:
+        for label_key, label_coords in label_data.items():
+            for coords_list in label_coords:
+                for coords in coords_list:
+                    for coord_pair in coords:
+                        all_values_x.extend({coord_pair[0]})
+                        all_values_y.extend({coord_pair[1]})
+    max_value_x = max(all_values_x)
+    min_value_x = min(all_values_x)
+    max_value_y = max(all_values_y)
+    min_value_y = min(all_values_y)
+    img = cv2.imread(save_path)
+    x1 = (min_value_x - 50)
+    x2 = (max_value_x + 50)
+    y1 = (min_value_y - 50)
+    y2 = (max_value_y + 50)
+    cropped_img = img[int(y1):int(y2), int(x1):int(x2)]
+    cv2.imwrite(new_path, cropped_img)
     return new_path, data, filename
 
 

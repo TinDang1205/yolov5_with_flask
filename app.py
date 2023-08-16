@@ -58,3 +58,6 @@ def predict_yolov5():
         return jsonify(data)
 
     return 'Upload file to detect'
+# Start Backend
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port='6868')
